@@ -6,8 +6,31 @@ function onButtonClicked() {
     showError('')
     try {
         const inputText = inputElemenent.value
-        const parsedInput = checkInput(inputText);
-        const convertedNumber = convertNumbers(parsedInput)
+        let parsedInput = checkInput(inputText);
+        if (parsedInput >= Math.pow(10, 12)) {
+            resultElement.innerHTML ='Your number is too big.';
+            return;
+        }
+        let convertedNumber = '';
+        const billion = Math.pow(10, 9);
+        console.log(`${parsedInput} >= ${billion}`, parsedInput >= billion);
+        if (parsedInput >= billion) {
+            convertedNumber = `${convertNumbers(Math.floor(parsedInput / billion))} Billions `;
+            parsedInput = parsedInput % billion;
+        }
+        const million = Math.pow(10, 6);
+        console.log(`${parsedInput} >= ${million}`, parsedInput >= million);
+        if (parsedInput >= million) {
+            convertedNumber = `${convertedNumber}${convertNumbers(Math.floor(parsedInput / million))} Millions `;
+            parsedInput = parsedInput % million;
+        }
+        const thousand = Math.pow(10, 3);
+        console.log(`${parsedInput} >= ${thousand}`, parsedInput >= thousand);
+        if (parsedInput >= thousand) {
+            convertedNumber = `${convertedNumber}${convertNumbers(Math.floor(parsedInput / thousand))} Thousands `;
+            parsedInput = parsedInput % thousand;
+        }
+        convertedNumber = `${convertedNumber}${convertNumbers(parsedInput)}`;
         resultElement.innerHTML = convertedNumber;
     } catch (error) {
         showError(error)
@@ -23,19 +46,18 @@ function checkInput(input) {
 }
 
 function convertNumbers(n) {
-    const zeroToNineteen = ['', 'one', 'two', 'three', 'four',
-        'five', 'six', 'seven', 'eight', 'nine',
-        'ten', 'eleven', 'twelve', 'thirteen', 'fourteen',
-        'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen',];
-    const tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+    const zeroToNineteen = ['', 'One', 'Two', 'Three', 'Four',
+        'Five', 'Six', 'Seven', 'Eight', 'Nine',
+        'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen',
+        'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen',];
+    const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
     let result = '';
 
     let number = n;
     if (number >= 100) {
         const hundredsNumber = Math.floor(number / 100);
-        console.log(hundredsNumber);
         number = number % 100;
-        result = `${zeroToNineteen[hundredsNumber]} hundred`
+        result = `${zeroToNineteen[hundredsNumber]} Hundred`
     }
     if (number < 20) {
         result = `${result} ${zeroToNineteen[number]}`
